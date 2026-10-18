@@ -34,6 +34,7 @@ unsigned __int128 APS5_VABI __udivti3_nid_postfix(unsigned __int128 dividend, un
 __int128 APS5_VABI __divti3_nid_postfix(__int128 dividend, __int128 divisor);
 unsigned __int128 APS5_VABI __umodti3_nid_postfix(unsigned __int128 dividend, unsigned __int128 divisor);
 __int128 APS5_VABI __modti3_nid_postfix(__int128 dividend, __int128 divisor);
+__int128 APS5_VABI __multi3_nid_postfix(__int128 a, __int128 b);
 SonyLconv* APS5_VABI localeconv_nid_postfix(void);
 int APS5_VABI sceAmprFpclassifyd(double value);
 unsigned int APS5_VABI _ZSt14_Random_devicev_nid_postfix();
@@ -158,6 +159,42 @@ int main() {
         trapped = std::strcmp(error.what(), "__umodti3: integer divide by zero (0x00000000000012340000000000005678 % 0)") == 0;
     }
     Require(trapped);
+
+    Require(__multi3_nid_postfix(6, 7) == 42);
+    Require(__multi3_nid_postfix(6, -7) == -42);
+    Require(__multi3_nid_postfix(-6, 7) == -42);
+    Require(__multi3_nid_postfix(-6, -7) == 42);
+    Require(__multi3_nid_postfix(0, 100) == 0);
+    Require(__multi3_nid_postfix(100, 0) == 0);
+    Require(__multi3_nid_postfix(0, 0) == 0);
+    Require(SonyMulti3(6, 7) == 42);
+    Require(SonyMulti3(6, -7) == -42);
+    Require(SonyMulti3(-6, 7) == -42);
+    Require(SonyMulti3(-6, -7) == 42);
+    Require(SonyMulti3(0, 100) == 0);
+    Require(SonyMulti3(100, 0) == 0);
+    Require(SonyMulti3(0, 0) == 0);
+    const __int128 halfShift = (__int128)1 << 50;
+    Require(__multi3_nid_postfix(halfShift, halfShift) == ((__int128)1 << 100));
+    Require(__multi3_nid_postfix(-halfShift, halfShift) == -((__int128)1 << 100));
+    Require(__multi3_nid_postfix(halfShift, -halfShift) == -((__int128)1 << 100));
+    Require(__multi3_nid_postfix(-halfShift, -halfShift) == ((__int128)1 << 100));
+    Require(SonyMulti3(halfShift, halfShift) == ((__int128)1 << 100));
+    Require(SonyMulti3(-halfShift, halfShift) == -((__int128)1 << 100));
+    Require(SonyMulti3(halfShift, -halfShift) == -((__int128)1 << 100));
+    Require(SonyMulti3(-halfShift, -halfShift) == ((__int128)1 << 100));
+    Require(__multi3_nid_postfix(minimum, 1) == minimum);
+    Require(__multi3_nid_postfix(maximum, 1) == maximum);
+    Require(__multi3_nid_postfix(minimum, -1) == minimum);
+    Require(__multi3_nid_postfix(maximum, -1) == -maximum);
+    Require(__multi3_nid_postfix(maximum, 2) == -2);
+    Require(__multi3_nid_postfix(minimum, 2) == 0);
+    Require(SonyMulti3(minimum, 1) == minimum);
+    Require(SonyMulti3(maximum, 1) == maximum);
+    Require(SonyMulti3(minimum, -1) == minimum);
+    Require(SonyMulti3(maximum, -1) == -maximum);
+    Require(SonyMulti3(maximum, 2) == -2);
+    Require(SonyMulti3(minimum, 2) == 0);
 
     void* previous = sceAmprSetConstraintHandlerS(reinterpret_cast<void*>(&CountingHandler));
     Require(previous != nullptr);

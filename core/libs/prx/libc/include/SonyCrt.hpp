@@ -240,6 +240,10 @@ inline __int128 SonyModti3(__int128 dividend, __int128 divisor) {
     return (__int128)(negative ? (unsigned __int128)0 - remainder : remainder);
 }
 
+inline __int128 SonyMulti3(__int128 a, __int128 b) {
+    return static_cast<__int128>(static_cast<unsigned __int128>(a) * static_cast<unsigned __int128>(b));
+}
+
 }
 
 #endif
